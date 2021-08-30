@@ -69,3 +69,26 @@ variable "cloudwatch_log_retention_in_days" {
   type        = number
   default     = 90
 }
+
+variable "allow_ip_capacity" {
+  description = "Number of rules this rule group will contain"
+  type        = number
+  default     = 25
+}
+
+variable "block_ip_capacity" {
+  description = "Number of rules this rule group will contain"
+  type        = number
+  default     = 25
+}
+
+variable "block_domain_capacity" {
+  description = "Number of rules this rule group will contain"
+  type        = number
+  default     = 25
+}
+variable "block_everything_capacity" {
+  description = "Number of rules this rule group will contain"
+  type        = number
+  default     = 25
+}

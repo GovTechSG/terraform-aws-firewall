@@ -44,7 +44,7 @@ resource "aws_networkfirewall_firewall_policy" "main" {
 resource "aws_networkfirewall_rule_group" "allow-ips" {
   for_each = var.allowed_ips
 
-  capacity    = 25
+  capacity    = var.allow_ip_capacity
   description = format("%s allow specific IPs for %s", local.dashed_name, each.key)
   name        = format("%s-allow-specific-ips-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
@@ -98,7 +98,7 @@ resource "aws_networkfirewall_rule_group" "allow-ips" {
 resource "aws_networkfirewall_rule_group" "block-ips" {
   for_each = var.blocked_ips
 
-  capacity    = 25
+  capacity    = var.block_ip_capacity
   description = format("%s block specific IPs for %s", local.dashed_name, each.key)
   name        = format("%s-block-specific-ips-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
@@ -152,7 +152,7 @@ resource "aws_networkfirewall_rule_group" "block-ips" {
 resource "aws_networkfirewall_rule_group" "block-domains" {
   for_each = var.blocked_domains
 
-  capacity    = 25
+  capacity    = var.block_domain_capacity
   description = format("%s block specific Domains for %s", local.dashed_name, each.key)
   name        = format("%s-block-specific-domains-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
@@ -173,7 +173,7 @@ resource "aws_networkfirewall_rule_group" "block-domains" {
 resource "aws_networkfirewall_rule_group" "block-everything" {
   count = var.enable_block_everything_by_default == true ? 1 : 0
 
-  capacity    = 10
+  capacity    = var.block_everything_capacity
   description = "Block all traffic"
   name        = format("%s-block-everything", local.dashed_name)
   type        = "STATEFUL"
