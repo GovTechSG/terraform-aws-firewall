@@ -34,28 +34,40 @@ variable "tags" {
 }
 
 variable "allowed_ips" {
-  description = "IPs to allow (both ingress & egress), note that keys can only be numeric."
-  type        = map(list(string))
-  default     = {}
+  description = "IPs to allow (both ingress & egress), note that keys can only be numeric, and maximum capacity across all rules is 30000"
+  type = map(object({
+    capacity = number
+    ips      = list(string)
+  }))
+  default = {}
 }
 
 # allow ips/domains - egress (outgoing)
 variable "egress_allowed_ips" {
-  description = "Destination IPs to allow for outgoing, note that keys can only be numeric."
-  type        = map(list(string))
-  default     = {}
+  description = "Destination IPs to allow for outgoing, note that keys can only be numeric, and maximum capacity across all rules is 30000"
+  type = map(object({
+    capacity = number
+    ips      = list(string)
+  }))
+  default = {}
 }
 
 variable "blocked_ips" {
-  description = "Block all traffic from/to specific IPs, note that keys can only be numeric."
-  type        = map(list(string))
-  default     = {}
+  description = "Block all traffic from/to specific IPs, note that keys can only be numeric, and maximum capacity across all rules is 30000"
+  type = map(object({
+    capacity = number
+    ips      = list(string)
+  }))
+  default = {}
 }
 
 variable "blocked_domains" {
-  description = "Domains to block (both ingress & egress)"
-  type        = map(set(string))
-  default     = {}
+  description = "Domains to block (both ingress & egress), maximum capacity across all rules is 30000"
+  type = map(object({
+    capacity = number
+    domains  = list(string)
+  }))
+  default = {}
 }
 
 variable "enable_block_everything_by_default" {
@@ -70,23 +82,6 @@ variable "cloudwatch_log_retention_in_days" {
   default     = 180
 }
 
-variable "allow_ip_capacity" {
-  description = "Number of rules this rule group will contain"
-  type        = number
-  default     = 25
-}
-
-variable "block_ip_capacity" {
-  description = "Number of rules this rule group will contain"
-  type        = number
-  default     = 25
-}
-
-variable "block_domain_capacity" {
-  description = "Number of rules this rule group will contain"
-  type        = number
-  default     = 25
-}
 variable "block_everything_capacity" {
   description = "Number of rules this rule group will contain"
   type        = number

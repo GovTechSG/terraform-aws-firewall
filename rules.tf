@@ -44,7 +44,7 @@ resource "aws_networkfirewall_firewall_policy" "main" {
 resource "aws_networkfirewall_rule_group" "allow-ips" {
   for_each = var.allowed_ips
 
-  capacity    = var.allow_ip_capacity
+  capacity    = each.value.capacity
   description = format("%s allow specific IPs for %s", local.dashed_name, each.key)
   name        = format("%s-allow-specific-ips-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
@@ -53,7 +53,7 @@ resource "aws_networkfirewall_rule_group" "allow-ips" {
     rules_source {
 
       dynamic "stateful_rule" {
-        for_each = each.value
+        for_each = each.value.ips
 
         content {
           action = "PASS"
@@ -72,7 +72,7 @@ resource "aws_networkfirewall_rule_group" "allow-ips" {
       }
 
       dynamic "stateful_rule" {
-        for_each = each.value
+        for_each = each.value.ips
 
         content {
           action = "PASS"
@@ -98,7 +98,7 @@ resource "aws_networkfirewall_rule_group" "allow-ips" {
 resource "aws_networkfirewall_rule_group" "block-ips" {
   for_each = var.blocked_ips
 
-  capacity    = var.block_ip_capacity
+  capacity    = each.value.capacity
   description = format("%s block specific IPs for %s", local.dashed_name, each.key)
   name        = format("%s-block-specific-ips-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
@@ -107,7 +107,7 @@ resource "aws_networkfirewall_rule_group" "block-ips" {
     rules_source {
 
       dynamic "stateful_rule" {
-        for_each = each.value
+        for_each = each.value.ips
 
         content {
           action = "DROP"
@@ -126,7 +126,7 @@ resource "aws_networkfirewall_rule_group" "block-ips" {
       }
 
       dynamic "stateful_rule" {
-        for_each = each.value
+        for_each = each.value.ips
 
         content {
           action = "DROP"
@@ -152,7 +152,7 @@ resource "aws_networkfirewall_rule_group" "block-ips" {
 resource "aws_networkfirewall_rule_group" "block-domains" {
   for_each = var.blocked_domains
 
-  capacity    = var.block_domain_capacity
+  capacity    = each.value.capacity
   description = format("%s block specific Domains for %s", local.dashed_name, each.key)
   name        = format("%s-block-specific-domains-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
@@ -161,7 +161,7 @@ resource "aws_networkfirewall_rule_group" "block-domains" {
     rules_source {
       rules_source_list {
         generated_rules_type = "DENYLIST"
-        targets              = each.value
+        targets              = each.value.domains
         target_types         = ["HTTP_HOST", "TLS_SNI"]
       }
     }
