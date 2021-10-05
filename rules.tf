@@ -103,48 +103,7 @@ resource "aws_networkfirewall_rule_group" "block-ips" {
   name        = format("%s-block-specific-ips-%s", local.dashed_name, each.key)
   type        = "STATEFUL"
 
-  rule_group {
-    rules_source {
-
-      dynamic "stateful_rule" {
-        for_each = each.value.ips
-
-        content {
-          action = "DROP"
-          header {
-            destination      = "ANY"
-            destination_port = "ANY"
-            protocol         = "IP"
-            direction        = "ANY"
-            source_port      = "ANY"
-            source           = stateful_rule.value
-          }
-          rule_option {
-            keyword = "sid:1${each.key}${stateful_rule.key}"
-          }
-        }
-      }
-
-      dynamic "stateful_rule" {
-        for_each = each.value.ips
-
-        content {
-          action = "DROP"
-          header {
-            destination      = stateful_rule.value
-            destination_port = "ANY"
-            protocol         = "IP"
-            direction        = "ANY"
-            source_port      = "ANY"
-            source           = "ANY"
-          }
-          rule_option {
-            keyword = "sid:0${each.key}${stateful_rule.key}"
-          }
-        }
-      }
-    }
-  }
+  rules = join("\n", [for ip in each.value.ips : "drop IP $HOME_NET ANY <> ${ip} ANY (sid:0${each.key}${index(each.value.ips, ip)};)"])
 
   tags = var.tags
 }
