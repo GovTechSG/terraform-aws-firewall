@@ -38,6 +38,10 @@ resource "aws_networkfirewall_firewall_policy" "main" {
     }
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = var.tags
 }
 
