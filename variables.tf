@@ -87,3 +87,10 @@ variable "block_everything_capacity" {
   type        = number
   default     = 25
 }
+
+variable "delete_protection" {
+  description = "Toggle to enable or disable deletion protection"
+  type        = bool 
+  default     = true  
+  # defaults to true to resolve https://docs.aws.amazon.com/securityhub/latest/userguide/networkfirewall-controls.html#networkfirewall-9
+}

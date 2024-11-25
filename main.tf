@@ -15,6 +15,7 @@ resource "aws_networkfirewall_firewall" "main" {
   name                = local.dashed_name
   firewall_policy_arn = aws_networkfirewall_firewall_policy.main.arn
   vpc_id              = var.vpc_id
+  delete_protection   = var.delete_protection
 
   dynamic "subnet_mapping" {
     for_each = var.subnet_ids
