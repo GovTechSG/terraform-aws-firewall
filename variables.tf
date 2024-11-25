@@ -91,5 +91,5 @@ variable "block_everything_capacity" {
 variable "delete_protection" {
   description = "Toggle to enable or disable deletion protection"
   type        = bool 
-  default     = false 
+  default     = true  
 }
