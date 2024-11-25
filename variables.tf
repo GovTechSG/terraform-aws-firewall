@@ -92,4 +92,5 @@ variable "delete_protection" {
   description = "Toggle to enable or disable deletion protection"
   type        = bool 
   default     = true  
+  # defaults to true to resolve https://docs.aws.amazon.com/securityhub/latest/userguide/networkfirewall-controls.html#networkfirewall-9
 }
