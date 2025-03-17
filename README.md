@@ -29,6 +29,17 @@ module "firewall" {
       "example.com"
     ]
   }
+
+  # for log group subscriptions 
+  lg_filters = {
+    "gcsoc" = {
+      naming_suffix   = "gcsoc-lg-filter"
+      role_arn        = "arn:aws:iam::${get_aws_account_id()}:role/central-logging-cloudwatch-firehose-role"
+      filter_pattern  = ""
+      destination_arn = "arn:aws:firehose:${local.common_vars.region}:${get_aws_account_id()}:deliverystream/clm-central-logging-firehose"
+      distribution    = "ByLogStream"
+    }
+  }
 }
 ```
 
@@ -65,6 +76,7 @@ No modules.
 | [aws_networkfirewall_rule_group.block-ips](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/networkfirewall_rule_group) | resource |
 | [random_id.sid](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_cloudwatch_log_subscription_filter.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_subscription_filter) | resource |
 
 ## Inputs
 
@@ -84,6 +96,7 @@ No modules.
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(any)` | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | n/a | `string` | `""` | no |
 | <a name="input_delete_protection"></a> [delete\_protection](#input\_delete\_protection) | n/a | `bool` | true | no |
+| <a name="input_lg_filters"></a> [lg\_filters](#input\_lg\_filters) | Log group filters to create for Network Firewall logs | <pre>map(object({<br> naming_suffix = string<br> role_arn = string<br> filter_pattern = string<br> destination_arn = string<br> distribution = string<br>}))</pre> | `{}` | no |
 
 ## Outputs
 
