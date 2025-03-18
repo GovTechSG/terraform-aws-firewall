@@ -90,7 +90,20 @@ variable "block_everything_capacity" {
 
 variable "delete_protection" {
   description = "Toggle to enable or disable deletion protection"
-  type        = bool 
-  default     = true  
+  type        = bool
+  default     = true
   # defaults to true to resolve https://docs.aws.amazon.com/securityhub/latest/userguide/networkfirewall-controls.html#networkfirewall-9
 }
+
+variable "lg_filters" {
+  description = "Log group filters for Network Firewall"
+  type = map(object({
+    naming_suffix   = string
+    role_arn        = string
+    filter_pattern  = string
+    destination_arn = string
+    distribution    = string
+  }))
+  default = {}
+}
+

@@ -115,3 +115,13 @@ resource "aws_kms_alias" "main" {
   name          = "alias/${local.dashed_name}-fw-cwl"
   target_key_id = aws_kms_key.main[0].key_id
 }
+
+resource "aws_cloudwatch_log_subscription_filter" "main" {
+  for_each        = var.lg_filters
+  name            = "${local.dashed_name}-${each.value.naming_suffix}"
+  role_arn        = each.value.role_arn
+  log_group_name  = one(aws_cloudwatch_log_group.main[*]).name
+  filter_pattern  = each.value.filter_pattern
+  destination_arn = each.value.destination_arn
+  distribution    = each.value.distribution
+}
